@@ -1,6 +1,8 @@
 package dao
 
 import (
+	"bubble/settings"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -9,8 +11,9 @@ var (
 	DB *gorm.DB
 )
 
-func InitMysql() (err error) {
-	dsn := "root:123@tcp(127.0.0.1:3306)/bubble?charset=utf8mb4&parseTime=True&loc=Local"
+func InitMysql(cfg *settings.MySQLConfig) (err error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB)
 	DB, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		return
